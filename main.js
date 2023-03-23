@@ -1,59 +1,55 @@
+let productos = []
+
 class ProductManager {
     constructor(){
-        this.products = []
-    }
-
-    static id = 0
-
-addProduct(title, description, price, img, code, stock){
-    for(let i = 0; i < this.products.length; i++){
-        if(this.products[i].code === code){
-            console.log(`El codigo ${code} ya a sido utilizado`);
-            break;
-        }
-    }
-
-    const newProduct ={ title, description, price, img, code, stock, }
-
-    if(!Object.values(newProduct).includes(undefined)){
-    ProductManager.id++
-    this.products.push({ ...newProduct, id:ProductManager.id});
-    }else{
-        console.log("todos los campos son requeridos")
-    }
-
+        this.products = productos
     }
 
 
+addProduct(newProduct){
+        if(!newProduct.title || !newProduct.description || !newProduct.price || !newProduct.img || !newProduct.code || !newProduct.stock) 
+        return "todos los campos son necesarios"
+
+        let product = this.products.find(prod => prod.code === newProduct.code)
+        if (product) return 'El codigo ingresado esta repetido'
+            
+        return this.products.push({id: this.products.length+1,...newProduct})
+    }
+
+    
 
 getProduct() {
     return this.products;
 }
 
-Existe(id){
-   return this.products.find((producto) => producto.id === id)
-}
 
 getProductById(id){
-    if(!this.Existe(id)){
-            console.log("Not Found")
-    }else{
-        console.log(this.Existe(id))
-    }
+    let product = this.products.find(prod => prod.id === id)
+    if(!product) return 'Not Found' 
+    return product
 }
 }
 
-const productos = new ProductManager
+const product = new ProductManager
 
 
 //PRODUCTOS
 
-productos.addProduct("produto1", "descrip1", 1000, "img1", "A1", 1000);
-productos.addProduct("producto2", "descrip2", 2000, "img2", "A2");
-productos.addProduct("produto3", "descrip3", 3000, "img3", "A2", 3000);
+product.addProduct({title: "produto1",
+description: "descrition1",
+price: 1000,
+img: "img1",
+code: "A1",
+stock:1000
+})
 
-console.log(productos.getProduct());
-productos.addProduct("produto3", "descrip3", 3000, "img3", "A2", 3000);
+product.addProduct({title: "produto2",
+description: "descrition2",
+price: 2000,
+img: "img2",
+code: "A2",
+stock:2000
+})
 
-
-productos.getProductById(1231242)
+console.log(product.getProduct())
+console.log(product.getProductById(2))

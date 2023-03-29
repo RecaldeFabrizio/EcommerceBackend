@@ -1,30 +1,31 @@
 import {promises as fs} from "fs"
 
-let productos = []
-
 class ProductManager {
     
     constructor(){
-      this.products = productos  
-      this.patch = "./productos.txt"
+      this.products = []
+      this.path = "./productos.json"
     }
 
     addProduct = async (newProduct) => {
-        if(!newProduct.title || !newProduct.description || !newProduct.price || !newProduct.img || !newProduct.code || !newProduct.stock) {
+        if(newProduct.title || newProduct.description || newProduct.price || newProduct.img || newProduct.code || newProduct.stock) {
         
         let product = this.products.find(prod => prod.code === newProduct.code)
         
         if (product) return 'El codigo ingresado esta repetido'
         
-          return this.products.push({id: this.products.length+1,...newProduct})
+         this.products.push({id: this.products.length+1,...newProduct})
 
         }
 
-        await fs.writeFile(this.patch, JSON.stringify(this.products))        
+        await fs.writeFile(this.path, JSON.stringify(this.products))        
     }
 
     readProduct = async() => {
-      let respuesta = await fs.readFile(this.patch, "utf-8")
+      if(!fs.existsStnc(this.path)){
+        return(`El Archivo ${this.path} no existe`)
+      }
+      let respuesta = await fs.readFile(this.path, "utf-8")
       return (JSON.parse(respuesta))
     }
 
@@ -45,14 +46,14 @@ class ProductManager {
     deleteProductById = async(id) =>{
       let respuesta3 = await this.readProduct()
       let productFilter = respuesta3.filter(prod => prod.id !=id)
-      await fs.writeFile(this.patch, JSON.stringify(productFilter))
+      await fs.writeFile(this.path, JSON.stringify(productFilter, null, 2))
     }
 
     updateProduct = async ({id,...product}) =>{
       await this.deleteProductById(id)
       let productOld = await this.readProduct()
       let productMod = [{...product, id}, ...productOld]
-      await fs.writeFile(this.patch, JSON.stringify(productMod))
+      await fs.writeFile(this.path, JSON.stringify(productMod, null, 2))
     }
   }
 

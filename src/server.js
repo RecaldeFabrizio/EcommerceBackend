@@ -9,4 +9,15 @@ app.use(express.urlencoded({extended: true}))
 const product = new ProductManager()
 const readProduct = product.readProduct()
 
-console.log(await readProduct)
+
+app.get("/products", async (req, res) =>{
+    res.send(await readProduct)
+})
+
+
+const PORT = 8080;
+const server = app.listen(PORT, () => {
+    console.log(`Express Local Host ${server.address().port}`)
+})
+
+server.on("error", (error) => console.log(`ERROR del servidor ${error}`))

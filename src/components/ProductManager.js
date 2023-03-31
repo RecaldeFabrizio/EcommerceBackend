@@ -1,6 +1,6 @@
-import {promises as fs} from "fs"
+import {promises as fs, existsSync} from "fs"
 
-class ProductManager {
+export default class ProductManager {
     
     constructor(){
       this.products = []
@@ -21,9 +21,9 @@ class ProductManager {
         await fs.writeFile(this.path, JSON.stringify(this.products))        
     }
 
-    readProduct = async() => {
-      if(!fs.existsStnc(this.path)){
-        return(`El Archivo ${this.path} no existe`)
+    readProduct = async () => {
+      if (!existsSync(this.path)) {
+        return (`El Archivo ${this.path} no existe`)
       }
       let respuesta = await fs.readFile(this.path, "utf-8")
       return (JSON.parse(respuesta))
@@ -57,20 +57,20 @@ class ProductManager {
     }
   }
 
-const product = new ProductManager();
+//const product = new ProductManager();
       
-product.addProduct({title: "produto1",
-description: "descrition1",
-price: 1000,
-img: "img1",
-code: "A1",
-stock:1000
-})
 
-product.addProduct({title: "produto2",
-description: "descrition2",
-price: 2000,
-img: "img2",
-code: "A2",
-stock:2000
-})
+//product.addProduct({title: "produto3",description: "descrition3",price: 3000,img: "img3",code: "A3",stock:3000})
+//product.addProduct({title: "produto2",description: "descrition2",price: 2000,img: "img2",code: "A2",stock:2000})
+//product.addProduct({title: "produto1",description: "descrition1",price: 1000,img: "img1",code: "A1",stock:1000})
+//product.addProduct({title: "produto4",description: "descrition4",price: 4000,img: "img4",code: "A4",stock:4000})
+//product.addProduct({title: "produto5",description: "descrition5",price: 5000,img: "img5",code: "A5",stock:5000})
+//product.addProduct({title: "produto6",description: "descrition6",price: 6000,img: "img6",code: "A6",stock:6000})
+//product.addProduct({title: "produto7",description: "descrition7",price: 7000,img: "img7",code: "A7",stock:7000})
+//product.addProduct({title: "produto8",description: "descrition8",price: 8000,img: "img8",code: "A8",stock:8000})
+//product.addProduct({title: "produto9",description: "descrition9",price: 9000,img: "img9",code: "A9",stock:9000})
+//product.addProduct({title:"producto10",description:"description10", price:10000,img:"img10",code:"A10",stock:10000})
+
+//product.getProduct()
+
+

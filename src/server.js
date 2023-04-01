@@ -11,7 +11,19 @@ const readProduct = product.readProduct()
 
 
 app.get("/products", async (req, res) =>{
-    res.send(await readProduct)
+    let limit = parseInt(req.query. limit)
+    if(!limit) return res.send(await readProduct)
+    let allProducts = await readProduct
+    let productLimit = allProducts.slice(0, limit)
+    res.send(productLimit)
+})
+
+
+app.get("/products/:id", async (req, res) =>{
+    let id = parseInt(req.params.id)
+    let allProducts = await readProduct
+    let productById = allProducts.find(prod => prod.id === id)
+    res.send(productById)
 })
 
 

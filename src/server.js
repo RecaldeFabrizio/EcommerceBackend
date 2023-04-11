@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(cookieParser())
 //app.use("/static", express.static(__dirname+"/public"))
 
-app.PORT((req, res, next) =>{
+app.use((req, res, next) =>{
     console.log("nid app - time", Date.now())
     next()
 })

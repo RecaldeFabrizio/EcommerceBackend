@@ -1,6 +1,6 @@
-import {promises as fs, existsSync} from "fs"
+const {promises, as ,fs, existsSync} = require ("fs")
 
-export default class ProductManager {
+module.exports = class ProductManager {
     
     constructor(){
       this.products = []
@@ -8,24 +8,31 @@ export default class ProductManager {
     }
 
     addProduct = async (newProduct) => {
-        if(newProduct.title || newProduct.description || newProduct.price || newProduct.img || newProduct.code || newProduct.stock) {
+        if(newProduct.title && newProduct.description && newProduct.price && newProduct.img && newProduct.code && newProduct.stock) {
         
         let product = this.products.find(prod => prod.code === newProduct.code)
         
         if (product) return 'El codigo ingresado esta repetido'
+
+        let ProductList = await this.readProduct()
         
-         this.products.push({id: this.products.length+1,...newProduct})
+         let newProductList = [...ProductList, {id: ProductList.length+1,...newProduct}]
+         this.products = newProductList
 
-        }
+         await Pfs.writeFile(this.path, JSON.stringify(newProductList)) 
+         return "Producto Agregado Correctamente"
 
-        await fs.writeFile(this.path, JSON.stringify(this.products))        
+        }else{
+          return "Faltan Campos Requeridos"
+       }
+
     }
 
     readProduct = async () => {
       if (!existsSync(this.path)) {
         return (`El Archivo ${this.path} no existe`)
       }
-      let respuesta = await fs.readFile(this.path, "utf-8")
+      let respuesta = await Pfs.readFile(this.path, "utf-8")
       return (JSON.parse(respuesta))
     }
 
@@ -45,15 +52,20 @@ export default class ProductManager {
 
     deleteProductById = async(id) =>{
       let respuesta3 = await this.readProduct()
-      let productFilter = respuesta3.filter(prod => prod.id !=id)
+      let productFilter = respuesta3.filter(prod => prod.id !==id)
       await fs.writeFile(this.path, JSON.stringify(productFilter, null, 2))
     }
 
-    updateProduct = async ({id,...product}) =>{
-      await this.deleteProductById(id)
-      let productOld = await this.readProduct()
-      let productMod = [{...product, id}, ...productOld]
-      await fs.writeFile(this.path, JSON.stringify(productMod, null, 2))
+    updateProduct = async ({id,...updatedFields}) =>{
+      let products = await this.readProduct()
+      let productIndex = products. findIndex (prod => prod.id === id)
+      if(productIndex === -1){
+        return "Product not Found"
+      } 
+      let product = {...products[productIndex], ...updatedFields, id}
+      products[productIndex] = product
+      await Pfs.writeFile(this.path, JSON.stringify(products, null, 2))
+      return "Producto Actulizado"
     }
   }
 
@@ -72,5 +84,3 @@ export default class ProductManager {
 //product.addProduct({title:"producto10",description:"description10", price:10000,img:"img10",code:"A10",stock:10000})
 
 //product.getProduct()
-
-

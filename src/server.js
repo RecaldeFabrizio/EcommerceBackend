@@ -1,30 +1,45 @@
-import express from "express"
-import ProductManager from "./components/ProductManager.js" 
+const express = require ("express")
+//import { Router } from "express"
+const cookieParser = require ("cookie-parser")
+const {uploader} = require ("./utils.js")
+//import path from "path"
+//import dirname from "path"
+const ProductManager = require ("./components/ProductManager.js") 
+const {productRoutes} = require ("./routes/productsRoutes.js")
+
 
 
 const app = express()
+app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use(cookieParser())
+//app.use("/static", express.static(__dirname+"/public"))
+
+app.PORT((req, res, next) =>{
+    console.log("nid app - time", Date.now())
+    next()
+})
 
 
 const product = new ProductManager()
-const readProduct = product.readProduct()
 
 
-app.get("/products", async (req, res) =>{
-    let limit = parseInt(req.query. limit)
-    if(!limit) return res.send(await readProduct)
-    let allProducts = await readProduct
-    let productLimit = allProducts.slice(0, limit)
-    res.send(productLimit)
+
+app.use("/api/products", productRoutes(product))
+
+app.use("/single", uploader, (res, req) => {
+    res.status(200).send({
+        Status: 'success',
+        massage: 'Archivo Subido'
+    })
 })
 
 
-app.get("/products/:id", async (req, res) =>{
-    let id = parseInt(req.params.id)
-    let allProducts = await readProduct
-    let productById = allProducts.find(prod => prod.id === id)
-    res.send(productById)
+app.use((err, req, res, next) =>{
+    console.log(err)
+    res.status(500).send("Todo Mal")
 })
+
 
 
 const PORT = 8080;

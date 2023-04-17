@@ -1,4 +1,5 @@
-const {promises, as ,fs, existsSync} = require ("fs")
+const fs = require("fs");
+const {promises, as, existsSync} = fs;
 
 module.exports = class ProductManager {
     
@@ -19,7 +20,7 @@ module.exports = class ProductManager {
          let newProductList = [...ProductList, {id: ProductList.length+1,...newProduct}]
          this.products = newProductList
 
-         await Pfs.writeFile(this.path, JSON.stringify(newProductList)) 
+         await fs.promises.writeFile(this.path, JSON.stringify(newProductList)) 
          return "Producto Agregado Correctamente"
 
         }else{
@@ -32,7 +33,7 @@ module.exports = class ProductManager {
       if (!existsSync(this.path)) {
         return (`El Archivo ${this.path} no existe`)
       }
-      let respuesta = await Pfs.readFile(this.path, "utf-8")
+      let respuesta = await fs.promises.readFile(this.path, "utf-8")
       return (JSON.parse(respuesta))
     }
 
@@ -53,7 +54,7 @@ module.exports = class ProductManager {
     deleteProductById = async(id) =>{
       let respuesta3 = await this.readProduct()
       let productFilter = respuesta3.filter(prod => prod.id !==id)
-      await fs.writeFile(this.path, JSON.stringify(productFilter, null, 2))
+      await fs.promises.writeFile(this.path, JSON.stringify(productFilter, null, 2))
     }
 
     updateProduct = async ({id,...updatedFields}) =>{
@@ -64,7 +65,7 @@ module.exports = class ProductManager {
       } 
       let product = {...products[productIndex], ...updatedFields, id}
       products[productIndex] = product
-      await Pfs.writeFile(this.path, JSON.stringify(products, null, 2))
+      await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2))
       return "Producto Actulizado"
     }
   }

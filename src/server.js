@@ -1,11 +1,10 @@
 const express = require ("express")
-const { Router } = require ("express")
 const cookieParser = require ("cookie-parser")
+const { Router } = require ("express")
 const {uploader} = require ("./utils.js")
-//import path from "path"
-//import dirname from "path"
 const ProductManager = require ("./components/ProductManager.js") 
 const {productRoutes} = require ("./routes/productsRoutes.js")
+const {carritoRoutes} = require ("./routes/carritoRoutes.js")
 
 
 const product = new ProductManager()
@@ -22,11 +21,12 @@ app.use((req, res, next) =>{
 
 
 app.use("/api/products", productRoutes(product))
+app.use("/api/carrito", carritoRoutes(product))
 
-app.use("/single", uploader, (req, res) => {
+app.post('/single', uploader.single('myfile'), (req, res)=>{
     res.status(200).send({
-        Status: 'success',
-        massage: 'Archivo Subido'
+        status: 'success',
+        message: 'se subió correctamente'
     })
 })
 

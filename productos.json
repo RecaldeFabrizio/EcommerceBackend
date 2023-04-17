@@ -52,5 +52,14 @@
     "img": "img16",
     "code": "A16",
     "stock": 16000
+  },
+  {
+    "id": 7,
+    "title": "producto17",
+    "description": "description17",
+    "price": 17000,
+    "img": "img17",
+    "code": "A17",
+    "stock": 17000
   }
 ]

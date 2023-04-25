@@ -1,0 +1,21 @@
+<div>
+    <h2>Productos</h2>
+    <hr>
+    <div>
+        <ul id="listProducts"></ul>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io()
+
+    socket.on("productos", data =>{
+        console.log(data)
+    let div = document.getElementById("listProducts")
+    let Productos = ""
+    data.forEach((product) => {
+        Productos += `<div> <ul> ${product.title} Precio: ${product.price} Cantidad: ${product.stock} </ul> </div>`
+    })
+    div.innerHTML = Productos
+})
+</script>

@@ -10,17 +10,17 @@ module.exports = class ProductManager {
 
     addProduct = async (newProduct) => {
         if(newProduct.title && newProduct.description && newProduct.price && newProduct.img && newProduct.code && newProduct.stock) {
-        
-        let product = this.products.find(prod => prod.code === newProduct.code)
-        
-        if (product) return 'El codigo ingresado esta repetido'
 
         let ProductList = await this.readProduct()
+
+          if(ProductList.find(prod => prod.code === newProduct.code)){
+            return 'El condigo ingresado esta repetido'
+          }
         
-         let newProductList = [...ProductList, {id: ProductList.length+1,...newProduct}]
+         let newProductList = [...ProductList, {id: ProductList[ProductList.length-1].id+1,...newProduct}]
          this.products = newProductList
 
-         await fs.promises.writeFile(this.path, JSON.stringify(newProductList)) 
+         await fs.promises.writeFile(this.path, JSON.stringify(newProductList, null, 2)) 
          return "Producto Agregado Correctamente"
 
         }else{

@@ -4,7 +4,7 @@ const ProductManager = require ("../components/ProductManager.js")
 const productRoutes  = (Product) =>{
 
 //const product = new ProductManager()
-const readProduct = Product. readProduct()
+const readProduct = Product.readProduct()
 const router = Router()
 
 router.get("/", async (req, res) =>{

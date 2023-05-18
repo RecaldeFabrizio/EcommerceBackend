@@ -1,7 +1,7 @@
 const fs = require('fs')
 const crypto = require('crypto')
 
-const path = './User.json'
+const path = '../src/mockDB/User.json'
 
 
 class ManagerUsuarios {

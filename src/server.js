@@ -6,14 +6,14 @@ const {uploader} = require ("./utils/utils.js")
 const ProductManager = require ("./components/ProductManager.js") 
 const {productRoutes} = require ("./routes/productsRoutes.js")
 const  productMongoRoutes = require ("./routes/product.mongo.routes.js")
-const {carritoRoutes} = require ("./routes/carritoRoutes.js")
+const cartRoutes = require ("./routes/cartRoutes.js")
 const userRoutes = require ("./routes/userRoutes.js")
 const viewsRoutes = require ("./routes/viewsRoutes.js")
 const objetConfig = require ("./config/objetConfig.js")
 const {Server} = require ("socket.io")
 const { socketChat } = require("./utils/socketChat.js")
 const { socketProduct } = require("./utils/socketProduct.js")
-const {CarritoManager} = require("./components/cartManager.js")
+const {CartManager} = require("./components/cartManager.js")
 
 
 const product = new ProductManager()
@@ -45,7 +45,7 @@ app.use((req, res, next) =>{
 app.use("/", viewsRoutes)
 app.use("/api/products", productRoutes(product))
 app.use("/api/productMongo", productMongoRoutes)
-//app.use("/api/carrito", carritoRoutes)
+app.use("/api/cart", cartRoutes)
 app.use("/api/user", userRoutes)
 
 app.post('/static', uploader.single('myfile'), (req, res)=>{

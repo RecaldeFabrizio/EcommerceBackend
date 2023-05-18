@@ -41,7 +41,6 @@ class ProductManagerFile{
         try {   
             
             let products = await this.readFile()
-            // si esta no lo voy a crear 
             const productDb = products.find(product => product.code === newItem.code)
             console.log(productDb)
             if (productDb) {
@@ -49,7 +48,7 @@ class ProductManagerFile{
             }
 
     
-            // console.log(products.length)
+           
             if (products.length === 0 ) {
                 newItem.id = 1
                 products.push(newItem) 

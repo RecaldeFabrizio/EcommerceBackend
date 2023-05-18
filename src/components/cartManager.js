@@ -1,37 +1,68 @@
-class CarritoManager {
-  constructor(productManager) {
-    this.productManager = productManager;
-    this.cart = []; 
-  }
+const fs = require("fs");
 
-  async getCarrito() {
-    return this.cart;
-  }
+const path = './src/mockDB/Cart.json'
 
-  async addProductToCart(productId) {
-    const product = await this.productManager.getProductById(productId);
-    if (product) {
-      this.cart.push(product);
-      return "Producto agregado al carrito";
-    } else {
-      return "Producto no encontrado";
+
+class CartManager{
+    constructor(){
+        this.path = path
     }
-  }
 
-  async deleteProductFromCart(productId) {
-    this.cart = this.cart.filter((product) => product.id !== productId);
-    return "Producto eliminado del carrito";
-  }
-
-  async updateProductInCart(productId, quantity) {
-    const product = this.cart.find((product) => product.id === productId);
-    if (product) {
-      product.quantity = quantity;
-      return "Producto actualizado en el carrito";
-    } else {
-      return "Producto no encontrado en el carrito";
+    readCart = async () => {
+        try {
+            const data = await fs.promises.readCart(this.path, 'utf-8')
+            console.log(data)
+            return JSON.parse(data)            
+        } catch (error) {
+            return []
+        }
+        
     }
-  }
-}
 
-module.exports = CarritoManager;
+    getCarts = async () => {
+        try {
+            return await this.readCart()
+        } catch (error) {
+            return 'No se hay productos'
+        }
+    }
+
+    getCartById = async (id) => {
+      try {
+          const carts = await this.readCart()
+          return carts.find(cart => cart.id === id)                     
+      } catch (error) {
+          return  new Error(error)
+      }
+  }
+
+    addCart = async (newCart) => {
+      try {   
+          
+          let carts = await this.readCart()
+          const cartsDb = carts.find(cart => cart.code === newCart.code)
+          console.log(cartsDb)
+          if (cartsDb) {
+              return `Se encuenta el producto`
+          }
+
+  
+         
+          if (carts.length === 0 ) {
+              newCart.id = 1
+              carts.push(newCart) 
+          } else {
+              carts =  [...carts, {...newCart, id: carts[carts.length - 1].id + 1 } ]
+          }
+
+          await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2), 'utf-8')
+
+          return 'Carrito Agragado'
+      } catch (error) {
+          return new Error(error)
+      }
+  }
+  }    
+  module.exports = {
+    CartManager
+  }

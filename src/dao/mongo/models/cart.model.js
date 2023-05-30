@@ -1,17 +1,21 @@
 const {Schema, model} = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2')
 
 const collection = 'carts'
 
 const cartSchema = new Schema({
-    pid: {
-        type: String,
-        unique: true,
-        required: true
+    cart: [{
+        product:{
+        type: Schema.Types.ObjectId,
+        ref: 'products'
     },
-    cantidad: { 
-        type: Number,
-        required: true
-    },
+        quantity: Number,
+    }]
+})
+
+cartSchema.plugin(mongoosePaginate)
+cartSchema.pre('findOne', function(){
+    this.populate('cart.product')
 })
 
 const cartModel = model(collection, cartSchema)

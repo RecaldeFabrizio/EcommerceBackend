@@ -10,7 +10,7 @@ class ProductManagerFile{
     readFile = async () => {
         try {
             const data = await fs.promises.readFile(this.path, 'utf-8')
-            console.log(data)
+            //console.log(data)
             return JSON.parse(data)            
         } catch (error) {
             return []
@@ -42,7 +42,7 @@ class ProductManagerFile{
             
             let products = await this.readFile()
             const productDb = products.find(product => product.code === newItem.code)
-            console.log(productDb)
+            //console.log(productDb)
             if (productDb) {
                 return `Se encuenta el producto`
             }

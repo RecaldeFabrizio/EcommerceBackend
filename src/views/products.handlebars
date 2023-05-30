@@ -1,0 +1,22 @@
+<div>
+    {{#each products}}
+    <li>
+      <strong>title: </strong>{{title}} -
+      <strong>description: </strong>{{description}} -
+      <strong>thumbnail: </strong>{{thumbnail}} -
+      <strong>price: </strong>{{price}} -
+      <strong>stock: </strong>{{stock}} -
+      <strong>code: </strong>{{code}}
+    </li>
+  {{/each}}
+
+    <center>
+        {{#if hasPrevPage}}
+            <a href="/api/productMongo?page={{prevPage}}"><button>anterior</button></a>
+        {{/if}}
+
+        {{#if hasNextPage}}
+            <a href="/api/productMongo?page={{nextPage}}"><button>Siguiente</button></a>
+        {{/if}}
+    </center>
+</div>

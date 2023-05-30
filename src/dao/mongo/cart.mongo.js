@@ -4,7 +4,7 @@ class CartManagerMongo {
     
     async getCart(){
         try{
-            return await cartModel.find({})
+            return await cartModel.find()
         }catch(err){
             return new Error(err)
         }

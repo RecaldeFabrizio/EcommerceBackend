@@ -1,18 +1,30 @@
 const { Router } = require('express')
 const { userModel } = require('../dao/mongo/models/user.model.js')
-
+const {auth} = require("../middleware/autenticacionMiddleware.js")
 
 const router = Router()
 
-router.get('/',  async (req, res)=>{
+router.get('/', auth, async (req, res)=>{
     try {
         
-        let users = await userModel.find()    
-        console.log(users)
-        res.send({
+        const {page=1} = req.query
+        let user = await userModel.paginate({}, {limit: 10, page: page, lean: true})
+        const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = user
+
+        if(!docs){
+            return res.status(400).send({status:'error', mensaje: 'documento no encontrado'})
+        }
+
+       res.render('user',{
             status: 'success',
-            payload: users
+            user: docs,
+            hasPrevPage,
+            hasNextPage,
+            prevPage,
+            nextPage,
+            totalPages
         })
+
     } catch (error) {
         console.log(error)
     }

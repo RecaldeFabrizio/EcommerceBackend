@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const  cartModel  = require('../dao/mongo/cart.mongo.js')
+const  { cartModel }  = require('../dao/mongo/models/cart.model.js')
 
 
 const router = Router()
@@ -7,12 +7,21 @@ const router = Router()
 router.get('/',  async (req, res)=>{
     try {
         
-        const carts = await cartModel.getCart(); 
-        console.log(carts)
-        res.send({
-            status: 'success',
-            payload: carts
-        })
+        const {page = 1} = req.query
+        const carts = await cartModel.paginate({},{limit: 1, page: page, lean: true})
+        const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = carts
+        //console.log(docs)
+
+        res.render('cart',{
+          carts: docs,
+          status: 'success',
+          hasPrevPage,
+          hasNextPage,
+          prevPage,
+          nextPage,
+          totalPages
+      })
+        
     } catch (error) {
         console.log(error)
     }
@@ -21,10 +30,13 @@ router.get('/',  async (req, res)=>{
 router.get('/:cid', async (req, res) => {
     try {
       const { cid } = req.params;
-      let carts = await cartModel.getCartById(cid);
+      let cart = await cartModel.findOne({_id: cid});
+      if(!cart){
+        return res.status(404).send({status: 'error', message: 'cart not found'})
+      }
       res.status(200).send({
         status: 'success',
-        payload: carts
+        payload: cart
       });
     } catch (error) {
       console.log(error);
@@ -34,9 +46,13 @@ router.get('/:cid', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-      const newCart = req.body;
+
+      let cart ={
+            
+        cart:[]
+      }
   
-      let result = await cartModel.addCart(newCart);
+      let result = await cartModel.create({});
   
       res.status(200).send({
         status: 'success',
@@ -47,41 +63,70 @@ router.post('/', async (req, res) => {
     }
   });
 
-
-router.put('/:cid', async (req, res) => {
-    const { cid } = req.params
-    const cart = req.body
-
+  router.post('/:cid/product/:pid', async (req, res) =>{
     try{
 
-    if(!cart.pid || !cart.cantidad){ 
-        return res.status(400).send({status:'error', mensaje: 'todos los campos son necesarios'})
-    }
-   
-    let  cartToReplace = {
-        pid: cart.pid, 
-        cantidad: cart.cantidad,
-    }
+      let {cid, pid} = req.params
+      let {quantity} = req.body
 
-    let result = await cartModel.updateCart(cid, cartToReplace)
-    
+      let resultUpdate = await cartModel.findOneAndUpdate(
+        {_id: cid, 'cart.product': pid},
+        {$inc:{'cart.$.quantity': quantity}},
+        {new: true}
+      )
 
-    res.send({
-        status: 'success',
-        payload: result
-    })
-} catch (error){
-    console.log(error)
-}
-})
+      if (resultUpdate){
+        res.send('producto añadido')
+      }
+
+      await cartModel.findByIdAndUpdate(
+        {_id: cid},
+        {$push : {cart: {product: pid, quantity}}},
+        {new: true, upsert: true}
+      )
+
+
+    }catch (error) {
+      console.log(error)
+    }
+  })
 
 
 router.delete('/:cid', async (req, res) => {
+  try {
+
+    let { cid } = req.params;
+
+    let result = await cartModel.findOneAndUpdate(
+      {_id: cid},
+      {$set: {cart: []}},
+      {new: true}
+    )
+
+    if(result){
+      res.send('carrito vacio')
+    }
+
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+
+router.delete('/:cid/product/:pid', async (req, res) => {
     try {
-      let { cid } = req.params;
+
+      let {cid, pid} = req.params
+
+      let result = await cartModel.findOneAndUpdate(
+        {_id: cid},
+        {$pull: {cart: {product: pid}}},
+        {new: true}
+      )
+      if(result){
+        res.send('Carrito vacio')
+      }
   
-      let result = await cartModel.deleteCart(cid);
-      res.send({ status: 'success', payload: result });
     } catch (error) {
       console.log(error);
     }

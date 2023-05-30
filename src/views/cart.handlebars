@@ -1,0 +1,21 @@
+<div>
+    {{#each carts}}
+    <li>
+      <strong>Cart:</strong>
+      {{#each this.cart}}
+        <p>Product: {{this.product}}</p>
+        <p>Quantity: {{this.quantity}}</p>
+      {{/each}}
+    </li>
+  {{/each}}
+
+    <center>
+        {{#if hasPrevPage}}
+            <a href="/api/cart?page={{prevPage}}"><button>anterior</button></a>
+        {{/if}}
+
+        {{#if hasNextPage}}
+            <a href="/api/cart?page={{nextPage}}"><button>Siguiente</button></a>
+        {{/if}}
+    </center>
+</div>

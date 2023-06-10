@@ -19,6 +19,9 @@ const {Server} = require ("socket.io")
 const { socketChat } = require("./utils/socketChat.js")
 const { socketProduct } = require("./utils/socketProduct.js")
 const {CartManager} = require("./components/cartManager.js")
+const { initPassport, initPassportGithub } = require('./config/passport.config.js')
+const passport = require('passport')
+
 
 
 const product = new ProductManager()
@@ -54,6 +57,12 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
+
+initPassportGithub()
+passport.use(passport.initialize())
+passport.use(passport.session())
+
+
 app.use("/static", express.static(__dirname+"/public"))
 
 app.use((req, res, next) =>{

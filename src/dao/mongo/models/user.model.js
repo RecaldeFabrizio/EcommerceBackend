@@ -2,18 +2,13 @@ const {Schema, model} = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate-v2')
 const collection = 'user'
 const userSchema = new Schema({
-    userName: {
-        type: String,
-        unique: true
-    },
     first_name: {
         type: String,
-        required: true,
+        index: true
         
     },
     last_name: {
         type: String,
-        required: true
     },
     email: {
         type: String,
@@ -28,7 +23,7 @@ const userSchema = new Schema({
     }
 })
 
-userSchema.plugin(mongoosePaginate)
+//userSchema.plugin(mongoosePaginate)
 const userModel = model(collection, userSchema)
 
 module.exports = {

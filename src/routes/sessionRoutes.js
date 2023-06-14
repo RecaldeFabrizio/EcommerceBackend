@@ -4,6 +4,8 @@ const { userModel } = require('../dao/mongo/models/user.model.js')
 const { createHash, isValidPassword } = require('../utils/bcryptHash.js')
 const passport = require('passport')
 const { generateToken } = require('../utils/jwt.js')
+const { passportCall } = require('../passport-jwt/passportCall.js')
+const { authorizaton } = require('../passport-jwt/authorizarionJwtRole.js')
 
 const router = Router()
 
@@ -72,15 +74,25 @@ router.post('/login', async (req, res)=> {
     const access_token = generateToken({
         first_name: 'Fabrizio',
         last_name: 'Recalde',
-        email: 'fabrizio.recalde98@gmail.com'
+        email: 'fabrizio.recalde98@gmail.com',
+        role: 'user'
     })
     
-    res.send({
+    res.cookie('coderCookieToken', access_token,{
+        maxAge: 60*60*100000,
+        httpOnly: true
+    })
+    
+    .send({
         status: 'success',
         message: 'login success',
-        access_token
+        //access_token
         // session: req.session.user
     })
+})
+
+router.get('/current', passportCall('jwt'), authorizaton('user'),(req, res) => {
+    res.send(req.user)
 })
 
 

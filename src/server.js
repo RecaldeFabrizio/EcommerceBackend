@@ -19,7 +19,8 @@ const {Server} = require ("socket.io")
 const { socketChat } = require("./utils/socketChat.js")
 const { socketProduct } = require("./utils/socketProduct.js")
 const {CartManager} = require("./components/cartManager.js")
-const { initPassport, initPassportGithub } = require('./config/passport.config.js')
+/* const { initPassport, initPassportGithub } = require('./config/passport.config.js') */
+const {initPassport} = require('./passport-jwt/passport.config.js')
 const passport = require('passport')
 
 
@@ -44,7 +45,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cookieParser('P@l@bra53cr3t0'))
 //const fileStore = FileStore(session)
-app.use(session({
+/* app.use(session({
     store: create({
         mongoUrl:'mongodb+srv://FDR98:Hesoyam123@cluster0.gkja86y.mongodb.net/test',
         mongoOptions:{
@@ -56,11 +57,12 @@ app.use(session({
     secret: 'secretCoder',
     resave: false,
     saveUninitialized: false
-}))
+})) */
 
-initPassportGithub()
+initPassport()
+//initPassportGithub()
 passport.use(passport.initialize())
-passport.use(passport.session())
+//passport.use(passport.session())
 
 
 app.use("/static", express.static(__dirname+"/public"))

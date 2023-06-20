@@ -1,9 +1,19 @@
 const {connect} = require('mongoose')
+const { commander } = require('../utils/commander.js')
+const dotenv = require('dotenv')
 
-let url = 'mongodb+srv://FDR98:Hesoyam123@cluster0.gkja86y.mongodb.net/?retryWrites=true&w=majority'
+
+const { mode } = commander.opts()
+dotenv.config({
+    path: mode === 'development' ? './.env.development': './.env.production'
+})
+
+
+let url = process.env.MONGO_URL_LOCAL
 
 module.exports = {
-    jwt_secret_key: 'palabraJwtSecreto',
+    port: process.env.PORT,
+    jwt_secret_key: process.env.JWT_SECRET_KEY,
     connectDB: () => {
         try {
             connect(url)

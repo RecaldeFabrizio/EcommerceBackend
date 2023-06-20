@@ -9,10 +9,11 @@ const {uploader} = require ("./utils/utils.js")
 const ProductManager = require ("./components/ProductManager.js") 
 const {productRoutes} = require ("./routes/productsRoutes.js")
 const  productMongoRoutes = require ("./routes/product.mongo.routes.js")
-const pruebaRoutes = require ("./routes/pruebaRoutes.js")
+const cookieRoutes = require ("./routes/cookieRoutes.js")
+const pruebasRoutes = require ('./routes/pruebas.routes.js')
 const sessionRouter = require ("./routes/sessionRoutes.js")
 const cartRoutes = require ("./routes/cartRoutes.js")
-const userRoutes = require ("./routes/userRoutes.js")
+const UserRouter = require ("./routes/newUser.routes.js")
 const viewsRoutes = require ("./routes/viewsRoutes.js")
 const objetConfig = require ("./config/objetConfig.js")
 const {Server} = require ("socket.io")
@@ -27,8 +28,9 @@ const passport = require('passport')
 
 const product = new ProductManager()
 const app = express()
+const userRouter = new UserRouter()
 
-const PORT = 8080;
+const PORT = 8080; //precess.env.PORT
 const httpServer = app.listen(PORT, () => {
     console.log(`Express Local Host ${httpServer.address().port}`)
 })
@@ -72,12 +74,13 @@ app.use((req, res, next) =>{
     next()
 })
 app.use("/", viewsRoutes)
-app.use("/prueba", pruebaRoutes)
+app.use("/cookie", cookieRoutes)
+app.use('/pruebas', pruebasRoutes)
 app.use('/api/session', sessionRouter)
 app.use("/api/products", productRoutes(product))
 app.use("/api/productMongo", productMongoRoutes)
 app.use("/api/cart", cartRoutes)
-app.use("/api/user", userRoutes)
+app.use("/api/user", userRouter.getRouter())
 
 app.post('/static', uploader.single('myfile'), (req, res)=>{
     res.status(200).send({

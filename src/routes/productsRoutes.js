@@ -1,6 +1,6 @@
 const  Router  = require ("express")
-const ProductManager = require ("../components/ProductManager.js") 
-const { authToken } = require('../utils/jwt.js')                                                                                                                                                                             
+const ProductManager = require ("../dao/manager/ProductManager.js") 
+//const { authToken } = require('../utils/jwt.js')                                                                                                                                                                             
 const passport = require("passport")
 
 const productRoutes  = (Product) =>{

@@ -6,29 +6,31 @@ const FileStore = require ("session-file-store")
 const {create} = require ("connect-mongo")
 const { Router } = require ("express")
 const {uploader} = require ("./utils/utils.js")
-const ProductManager = require ("./components/ProductManager.js") 
+const ProductManager = require ("./dao/manager/ProductManager.js") 
 const {productRoutes} = require ("./routes/productsRoutes.js")
-const  productMongoRoutes = require ("./routes/product.mongo.routes.js")
+const  productMongoRoutes = require ("../src/routes/product.mongo.routes.js")
 const cookieRoutes = require ("./routes/cookieRoutes.js")
 const pruebasRoutes = require ('./routes/pruebas.routes.js')
 const sessionRouter = require ("./routes/sessionRoutes.js")
 const cartRoutes = require ("./routes/cartRoutes.js")
-const UserRouter = require ("./routes/newUser.routes.js")
+//const UserRouter = require ("./routes/newUser.routes.js")
+const UserRouter = require ("./routes/userRoutes.js")
 const viewsRoutes = require ("./routes/viewsRoutes.js")
 const objetConfig = require ("./config/objetConfig.js")
 const {Server} = require ("socket.io")
 const { socketChat } = require("./utils/socketChat.js")
 const { socketProduct } = require("./utils/socketProduct.js")
-const {CartManager} = require("./components/cartManager.js")
+const {CartManager} = require("./dao/manager/cartManager.js")
 /* const { initPassport, initPassportGithub } = require('./config/passport.config.js') */
 const {initPassport} = require('./passport-jwt/passport.config.js')
 const passport = require('passport')
+const cors = require ("cors")
 
 
 
 const product = new ProductManager()
 const app = express()
-const userRouter = new UserRouter()
+//const userRouter = new UserRouter()
 
 const PORT = 8080; //precess.env.PORT
 const httpServer = app.listen(PORT, () => {
@@ -37,13 +39,14 @@ const httpServer = app.listen(PORT, () => {
 
 const io = new Server(httpServer)
 
-objetConfig .connectDB()
+objetConfig .connectDB
 
 
 app.engine("handlebars", handlebars.engine())
 app.set("views", __dirname+"/views")
 app.set("view engine", "handlebars")
 app.use(express.json())
+app.use(cors())
 app.use(express.urlencoded({extended: true}))
 app.use(cookieParser('P@l@bra53cr3t0'))
 //const fileStore = FileStore(session)
@@ -80,7 +83,7 @@ app.use('/api/session', sessionRouter)
 app.use("/api/products", productRoutes(product))
 app.use("/api/productMongo", productMongoRoutes)
 app.use("/api/cart", cartRoutes)
-app.use("/api/user", userRouter.getRouter())
+app.use("/api/user", UserRouter)//.getRouter())
 
 app.post('/static', uploader.single('myfile'), (req, res)=>{
     res.status(200).send({

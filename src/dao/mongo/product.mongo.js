@@ -1,52 +1,30 @@
-const { productModel } = require("../../dao/mongo/models/product.model.js")
+const { productModel } = require("../models/product.model.js")
 
-class ProductManagerMongo {
-    
-    async getProducts(){
-        try{
-            return await productModel.find({})
-        }catch(err){
-            return new Error(err)
-        }
-    }
-    async getProductById(pid){
-        try {            
-            return await productModel.findOne({_id: pid})
-        } catch (error) {
-            return new Error(error)
-        }
 
+class ProductDaoMongo{
+    constructor() {
+        this.productModel = productModel
     }
-    async addProduct(newProduct){
-        try {
-            
-            return await productModel.create(newProduct)
-        } catch (error) {
-            return new Error(error)
-        }
+
+    async get(/* page = 1 */){
+        return await this.productModel.find({}/* , {page, lean: true} */)
     }
-    async updateProduct(pid, updatedProduct) {
-        try {
-          
-          const updated = await productModel.updateOne(pid, updatedProduct, { new: true, });
-      
-          if (!updated) {
-            return "Product not found";
-          }
-      
-          return updated;
-        } catch (error) {
-          return new Error(error);
-        }
-      }
-    async deleteProduct(pid){
-        try {
-            await productModel.deleteOne({_id: pid});
-            return "Product deleted successfully";
-        } catch (error) {
-            return new Error(error);
-        }
+
+    async getById(pid){
+        return await this.productModel.findOne({_id: pid})
+    }
+
+    async create(newProduct){
+        return await this.productModel.create(newProduct)
+    }
+
+    async update(pid, updateProduct){
+        return await this.productModel.findOneAndUpdate({_id: pid}, updateProduct)
+    }
+
+    async delete(pid){
+        return await this.productModel.findOneAndDelete({_id: pid})
     }
 }
 
- module.exports = new ProductManagerMongo
+module.exports = ProductDaoMongo

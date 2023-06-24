@@ -1,6 +1,6 @@
 const {Router} = require('express')
 const { auth } = require('../middleware/autenticacionMiddleware.js')
-const { userModel } = require('../dao/mongo/models/user.model.js')
+const { userModel } = require('../dao/models/user.model.js')
 const { createHash, isValidPassword } = require('../utils/bcryptHash.js')
 const passport = require('passport')
 const { generateToken } = require('../utils/jwt.js')

@@ -1,4 +1,4 @@
-const  {ProductManagerFile}  = require("../components/ProductManagerFile")
+const  {ProductManagerFile}  = require("../dao/mongo/ProductManagerFile")
 const {socket} = require ("socket.io")
 
 const ProductManager = new ProductManagerFile()

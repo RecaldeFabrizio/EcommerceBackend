@@ -9,6 +9,7 @@ const {uploader} = require ("./utils/utils.js")
 const ProductManager = require ("./dao/manager/ProductManager.js") 
 const {productRoutes} = require ("./routes/productsRoutes.js")
 const  productMongoRoutes = require ("../src/routes/product.mongo.routes.js")
+const contactsRouter = require('./routes/contacts.router.js')
 const cookieRoutes = require ("./routes/cookieRoutes.js")
 const pruebasRoutes = require ('./routes/pruebas.routes.js')
 const sessionRouter = require ("./routes/sessionRoutes.js")
@@ -84,7 +85,7 @@ app.use("/api/products", productRoutes(product))
 app.use("/api/productMongo", productMongoRoutes)
 app.use("/api/cart", cartRoutes)
 app.use("/api/user", UserRouter)//.getRouter())
-
+app.use("/api/contacts", contactsRouter)
 app.post('/static', uploader.single('myfile'), (req, res)=>{
     res.status(200).send({
         status: 'success',

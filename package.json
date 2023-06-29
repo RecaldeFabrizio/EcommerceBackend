@@ -12,7 +12,8 @@
   "test": "echo \"Error: no test specified\" && exit 1",
   
     
-  "server": "nodemon src/server.js"
+  "server": "nodemon src/server.js -- mode production",
+  "dev": "node src/server.js -- mode development"
   
   },
   

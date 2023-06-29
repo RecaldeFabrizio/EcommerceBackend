@@ -6,13 +6,14 @@ const { MongoSingleton } = require('../utils/singleton.js')
 
 const { mode } = commander.opts()
 dotenv.config({
-    path: mode === 'development' ? './.env.development': './.env.production'
+    path: mode === 'production' ? './.env.development': './.env.production'
 })
 
 
 let url = process.env.MONGO_URL_LOCAL
 
 module.exports = {
+    persistence: process.env.PERSISTENCE,
     port: process.env.PORT,
     jwt_secret_key: process.env.JWT_SECRET_KEY,
     /* connectDB: () => {
@@ -23,5 +24,5 @@ module.exports = {
             console.log(error)
         }
     } */
-    connectDB: MongoSingleton.getInstance()
+    connectDB: async() =>await MongoSingleton.getInstance()
 }

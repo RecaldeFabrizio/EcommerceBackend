@@ -4,14 +4,14 @@ class UserController {
 
     getUsers = async (req, res)=>{
         try {
-            const {page=1} = req.query
-            const limit = 10
+            //const {page=1} = req.query
+            //const limit = 10
             //let user = await userService.paginate({}, {limit: 10, page: page, lean: true})
-            let user = await userService.get(limit, page)
-            const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = user
+            let user = await userService.get(/* limit, page */)
+            //const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = user
     
     
-            res.render('user',{
+           /*  res.render('user',{
                 status: 'success',
                 user: docs,
                 hasPrevPage,
@@ -19,7 +19,8 @@ class UserController {
                 prevPage,
                 nextPage,
                 totalPages
-            })
+            }) */
+            res.send({status: 'success', payload: user})
         } catch (error) {
             console.log(error)
         }

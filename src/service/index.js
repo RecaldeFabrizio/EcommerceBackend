@@ -1,10 +1,18 @@
-const UserDaoMongo    = require("../dao/Mongo/user.mongo.js");
-const ProductDaoMongo = require('../dao/mongo/product.mongo.js')
+const { 
+    ContactDao, 
+    ProductDao, 
+    UserDao 
+} = require("../dao/factory/factory.js")
+const ContactRepository = require("../repositories/contacts.repository.js")
 
-const userService = new UserDaoMongo()
-const productService = new ProductDaoMongo()
+const productService = new ProductDao()
+const userService = new UserDao()
+
+const contactService = new ContactRepository(new ContactDao())
 
 module.exports = {
+    productService,
     userService,
-    productService
+    contactService
 }
+

@@ -2,11 +2,11 @@ const { productService } = require ("../service/index.js")
 
 class ProductController {
 
-getProduct = async (req, res)=>{
+getProducts = async (req, res)=>{
   try {
       //const {page = 1} = req.query
       //const product = await productService.paginate({},{limit: 1, page: page, lean: true})
-      let products = await productService.get()
+      const products = await productService.getProducts()
       //const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products
       //console.log(docs)
 
@@ -27,28 +27,35 @@ getProduct = async (req, res)=>{
   }
 }
 
-createProduct = async (req, res) => {
+getProuduct = async (req, res)=>{
   try {
-
-    let products = req.body
-
-    const newProduct ={
-      title: products.title,
-      description: products.description,
-      thumbnail: products.thumbnail,
-      price: products.price,
-      stock: products.stock,
-      code: products.code     
-    }
-
-    let result = await productService.create(newProduct);
-
-    res.status(200).send({result})
-
+      const {pid} = req.params
+      let product = await productService.getProduct(pid)
+      res.send({
+          status: 'success',
+          payload: product
+      }) 
   } catch (error) {
-    console.log(error);
+      console.log(error)
   }
 }
+
+
+
+createProduct = async (req, res) => {
+  try {
+    const {body} = req
+    
+    let  result = await productService.createProduct(body)
+    res.send({
+        stauts: 'success',
+        payload: result
+    }) 
+} catch (error) {
+    console.log(error)
+}
+}
+
 
 updateProduct = async (req, res) => {
   const { pid } = req.params;
@@ -88,4 +95,4 @@ deleteProduct = async (req, res) => {
 
 }
 
-module.exports = new ProductController()
+module.exports =  {ProductController}

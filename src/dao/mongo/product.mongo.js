@@ -11,7 +11,7 @@ class ProductDaoMongo{
     }
 
     async getById(pid){
-        return await this.productModel.findOne({_id: pid})
+        return await this.productModel.find({_id: pid})
     }
 
     async create(newProduct){

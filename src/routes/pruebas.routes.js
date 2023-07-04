@@ -4,10 +4,22 @@ const {fork} = require('child_process')
 const nodemailer = require('nodemailer')
 const { sendMail } = require('../utils/sendmail.js')
 const { sendWhatsapp, sendSms } = require('../utils/sendsms.js')
-
+const { generateUser } = require('../utils/generateUserFaker.js')
 
 
 const router = Router()
+
+
+router.get('/mocks', (req, res)=> {
+    let users = []
+    for (let i = 0; i < 100; i++) {
+        users.push(generateUser())      
+    }
+    res.send({
+        status: 'success',
+        payload: users
+    })
+})
 
 
 router.get('/sms', async (req, res) => {
@@ -15,7 +27,6 @@ router.get('/sms', async (req, res) => {
     await sendWhatsapp('Fabrizio', 'Recalde')
     res.send('SMS enviado')
 })
-
 
 
 router.get('/mail', async (req, res) =>{
@@ -46,6 +57,7 @@ router.get('/block', (req, res)=>{
     res.send(`el resultado de la operación es ${result}`)
 })
 
+
 router.get('/noblock', (req, res)=>{
     const child = fork('./src/utils/operacionCompleja.js')
     
@@ -55,12 +67,14 @@ router.get('/noblock', (req, res)=>{
     })
 })
 
+
 router.get('/suma', (req, res)=>{    
     res.send(`Hola mundo`)
 })
 
 
 const nombres = ['fede', 'juan']
+
 
 router.param('nombre', (req, res, next, nombre)=>{
     if(!nombres.includes(nombre)) {
@@ -71,11 +85,14 @@ router.param('nombre', (req, res, next, nombre)=>{
     next()
 })
 
+
 router.get('/params/:nombre([a-z%C3%A1%C3%A9%C3%AD%C3%B3%C3%BA%C3%BC]+)', (req,res) => {
     res.send({
         message: req.nombre
     })
 })
+
+
 router.get('/params/:nombre([a-z%C3%A1%C3%A9%C3%AD%C3%B3%C3%BA%C3%BC]+)/:apellido', (req,res) => {
     res.send({
         message: req.params.nombre
@@ -88,11 +105,14 @@ router.put('/params/:nombre([a-z%C3%A1%C3%A9%C3%AD%C3%B3%C3%BA%C3%BC]+)', (req,r
         message: req.params.nombre
     })
 })
+
+
 router.delete('/params/:nombre([a-z%C3%A1%C3%A9%C3%AD%C3%B3%C3%BA%C3%BC]+)', (req,res) => {
     res.send({
         message: req.params.nombre
     })
 })
+
 
 router.get('*', async (req,res)=> {
     res.status(404).send('404 Not found')
@@ -102,6 +122,8 @@ router.get('*', async (req,res)=> {
 router.get('/', (req, res)=>{
     res.render('login', {})
 })
+
+
 router.post('/getcookieuser', (req, res)=> {
     const {username, email} = req.body
     
@@ -112,13 +134,18 @@ router.post('/getcookieuser', (req, res)=> {
 router.get('/setCookie', (req, res)=> {
     res.cookie('CoderCookie', 'Esta es una cookie muy poderosa', {maxAge: 10000000}).send('cookie setada')
 })
+
+
 router.get('/getCookie', (req, res)=> {
     res.send(req.cookies)
 })
 
+
 router.get('/setSignedCookie', (req, res)=> {
     res.cookie('SignedCookie', 'Esta es una cookie muy poderosa', {maxAge: 10000000, signed: true}).send('cookie setada')
 })
+
+
 router.get('/getSignedCookie', (req, res)=> {
     res.send(req.signedCookies)
 })

@@ -8,4 +8,4 @@ class ContactDaoMongo {
     create = async (newContact) => this.contactModel.create(newContact) 
 }
 
-module.exports = ContactDaoMongo
+module.exports = ContactDaoMongo 

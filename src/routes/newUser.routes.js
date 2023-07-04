@@ -1,4 +1,5 @@
 const RouterClass = require('./RouterClass.js')
+const jwt = require('jsonwebtoken')
 
 class UserRouter extends RouterClass{
     init(){

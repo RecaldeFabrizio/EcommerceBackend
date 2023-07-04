@@ -1,8 +1,35 @@
 const {Router} = require('express')
 const { auth } = require('../middleware/autenticacionMiddleware.js')
 const {fork} = require('child_process')
+const nodemailer = require('nodemailer')
+const { sendMail } = require('../utils/sendmail.js')
+const { sendWhatsapp, sendSms } = require('../utils/sendsms.js')
+
+
 
 const router = Router()
+
+
+router.get('/sms', async (req, res) => {
+    //await sendSms('Fabrizio', 'Recalde')
+    await sendWhatsapp('Fabrizio', 'Recalde')
+    res.send('SMS enviado')
+})
+
+
+
+router.get('/mail', async (req, res) =>{
+
+    let destino = 'fabrizio.recalde98@gmail.com'
+    let subject = 'correo de prueba'
+    let html = `<div>
+    <h1>Ecommerce test</h1>
+    </div>`
+
+    let result = await sendMail(destino, subject, html)
+
+    res.send('Email enviado')
+})
 
 
 function operacionCompleja() {

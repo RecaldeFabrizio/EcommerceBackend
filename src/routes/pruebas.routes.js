@@ -5,9 +5,27 @@ const nodemailer = require('nodemailer')
 const { sendMail } = require('../utils/sendmail.js')
 const { sendWhatsapp, sendSms } = require('../utils/sendsms.js')
 const { generateUser } = require('../utils/generateUserFaker.js')
+const compression = require ('express-compression')
 
 
 const router = Router()
+
+
+router.use(compression({
+    brotli: {
+        enabled: true,
+        zlib: {}
+    }
+}))
+
+
+router.get('/stringmuylargo', (req, res)=> {
+    let string = `Hola Coders, soy una string ridículamente largo`
+    for(let i=0; i<5e4; i++){
+        string += `Hola Coders, soy una string ridículamente largo`
+    }
+    res.send(string)
+})
 
 
 router.get('/mocks', (req, res)=> {
@@ -22,11 +40,11 @@ router.get('/mocks', (req, res)=> {
 })
 
 
-router.get('/sms', async (req, res) => {
+/* router.get('/sms', async (req, res) => {
     //await sendSms('Fabrizio', 'Recalde')
     await sendWhatsapp('Fabrizio', 'Recalde')
     res.send('SMS enviado')
-})
+}) */
 
 
 router.get('/mail', async (req, res) =>{

@@ -1,11 +1,16 @@
 const {Router} = require('express')
 const { auth } = require('../middleware/autenticacionMiddleware.js')
 const { userModel } = require('../dao/models/user.model.js')
+const { productModel } = require ('../dao/models/product.model.js')
 const { createHash, isValidPassword } = require('../utils/bcryptHash.js')
 const passport = require('passport')
 const { generateToken } = require('../utils/jwt.js')
 const { passportCall } = require('../passport-jwt/passportCall.js')
 const { authorizaton } = require('../passport-jwt/authorizarionJwtRole.js')
+
+const { CustomError } = require('../utils/CustomError/CustomErorr.js')
+const { generateUserErrorInfo, generatePoductErrorInfo } = require('../utils/CustomError/info.js')
+const { EError } = require('../utils/CustomError/EErorrs.js')
 
 const router = Router()
 
@@ -96,9 +101,9 @@ router.get('/current', passportCall('jwt'), authorizaton('user'),(req, res) => {
 })
 
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
     try {
-        const {username,first_name, last_name, email, password} = req.body 
+        const {first_name, last_name, email} = req.body 
     
         // const existUser = await userModel.findOne({email})
     
@@ -121,6 +126,21 @@ router.post('/register', async (req, res) => {
         //     password: createHash(password) 
         // }
         // let resultUser = await userModel.create(newUser)
+
+        if (!first_name || !last_name || !email) {
+            CustomError.createError({
+                name: 'User creation error',
+                cause: generateUserErrorInfo({
+                    first_name, 
+                    last_name,
+                    email
+                }),
+                message: 'Error trying to created user',
+                code: EError.INVALID_TYPE_ERROR
+            })
+        }
+    
+
     
         let token = generateToken({
             first_name: 'Fabrizio',
@@ -135,12 +155,39 @@ router.post('/register', async (req, res) => {
             token
         })
     } catch (error) {
-        console.log(error)
+        next(error)
     }
    
 })
 
 
+router.post("/product", async (req, res, next) =>{
+    try {
+        const {title, price, code} = req.body
+
+        if(!title || !price || !code){
+            CustomError.createError({
+                name: 'Product creation errror',
+                cause: generatePoductErrorInfo({
+                    title,
+                    price,
+                    code
+                }),
+                message: 'Error trying to created Product',
+                code: EError.INVALID_TYPE_ERRORs
+            })
+        }
+        
+        
+            res.status(200).send({
+                status: 'success',
+                message: 'Producto creado correctamente',
+            })
+    
+    }catch (error) {
+        next(error)
+    }
+})
 
 
 router.get('/logout', (req, res)=>{

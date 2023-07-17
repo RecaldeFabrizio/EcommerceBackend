@@ -26,6 +26,7 @@ const {CartManager} = require("./dao/manager/cartManager.js")
 const {initPassport} = require('./passport-jwt/passport.config.js')
 const passport = require('passport')
 const cors = require ("cors")
+const { errorHandler } = require("./middleware/error.middleware.js")
 
 
 
@@ -96,7 +97,8 @@ app.post('/static', uploader.single('myfile'), (req, res)=>{
 socketChat(io)
 socketProduct(io)
 
-app.use((err, req, res, next) =>{
+/* app.use((err, req, res, next) =>{
     console.log(err)
     res.status(500).send("Todo Mal")
-})
+}) */
+app.use(errorHandler)

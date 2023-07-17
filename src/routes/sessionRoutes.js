@@ -54,18 +54,18 @@ const router = Router()
 router.post('/login', async (req, res)=> {
     const {email, password} = req.body
 
-    // const {password: pass, ...userDb} = await userModel.findOne({email})
+    const {password: pass, ...userDb} = await userModel.findOne({email})
     // 
     // console.log(userDB)
 
-    // if (!userDB) return res.send({status: 'error', message: 'No existe ese usuario, revisar'})
+    if (!userDB) return res.send({status: 'error', message: 'No existe ese usuario, revisar'})
 
     
 
-    // if (!isValidPassword(password, userDB)) return res.status(401).send({
-    //     status: 'error',
-    //     message: 'El usuario o la contraseña no es la correcta'
-    // })
+    if (!isValidPassword(password, userDB)) return res.status(401).send({
+        status: 'error',
+        message: 'El usuario o la contraseña no es la correcta'
+    })
 
 
     // req.session.user = {
@@ -76,7 +76,7 @@ router.post('/login', async (req, res)=> {
     // }
 
     // userDb 
-    const access_token = generateToken({
+    /* const access_token = generateToken({
         first_name: 'Fabrizio',
         last_name: 'Recalde',
         email: 'fabrizio.recalde98@gmail.com',
@@ -86,9 +86,9 @@ router.post('/login', async (req, res)=> {
     res.cookie('coderCookieToken', access_token,{
         maxAge: 60*60*100000,
         httpOnly: true
-    })
+    }) */
     
-    .send({
+    res.send({
         status: 'success',
         message: 'login success',
         //access_token
@@ -105,28 +105,6 @@ router.post('/register', async (req, res, next) => {
     try {
         const {first_name, last_name, email} = req.body 
     
-        // const existUser = await userModel.findOne({email})
-    
-        // if (existUser) return res.send({status: 'error', message: 'el email ya está registrado' })
-    
-        // const newUser = new userModel({
-        //     username,
-        //     first_name,
-        //     last_name, 
-        //     email, 
-        //     password 
-        // })
-        // await newUser.save()
-    
-        // const newUser = {
-        //     username,
-        //     first_name,
-        //     last_name, 
-        //     email, 
-        //     password: createHash(password) 
-        // }
-        // let resultUser = await userModel.create(newUser)
-
         if (!first_name || !last_name || !email) {
             CustomError.createError({
                 name: 'User creation error',
@@ -139,20 +117,43 @@ router.post('/register', async (req, res, next) => {
                 code: EError.INVALID_TYPE_ERROR
             })
         }
+
+
+         const existUser = await userModel.findOne({email})
     
+         if (existUser) return res.send({status: 'error', message: 'el email ya está registrado' })
+    
+        // const newUser = new userModel({
+        //     username,
+        //     first_name,
+        //     last_name, 
+        //     email, 
+        //     password 
+        // })
+        // await newUser.save()
+    
+        const newUser = {
+            username,
+            first_name,
+            last_name, 
+            email, 
+            password: createHash(password) 
+        }
+        let resultUser = await userModel.create(newUser)
 
     
-        let token = generateToken({
+        /* let token = generateToken({
             first_name: 'Fabrizio',
             last_name: 'Recalde',
             email: 'fabrizio.recalde98@gmail.com'
-        })
+        }) */
     
     
         res.status(200).send({
             status: 'success',
             message: 'Usuario creado correctamente',
-            token
+            payload: resultUser
+            //token
         })
     } catch (error) {
         next(error)

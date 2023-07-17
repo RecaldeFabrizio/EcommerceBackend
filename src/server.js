@@ -27,6 +27,7 @@ const {initPassport} = require('./passport-jwt/passport.config.js')
 const passport = require('passport')
 const cors = require ("cors")
 const { errorHandler } = require("./middleware/error.middleware.js")
+const { addLogger, logger } = require("./config/logger.js")
 
 
 
@@ -36,7 +37,7 @@ const app = express()
 
 const PORT = 8080; //precess.env.PORT
 const httpServer = app.listen(PORT, () => {
-    console.log(`Express Local Host ${httpServer.address().port}`)
+    logger.info(`Express Local Host ${httpServer.address().port}`)
 })
 
 const io = new Server(httpServer)
@@ -51,6 +52,7 @@ app.use(express.json())
 app.use(cors())
 app.use(express.urlencoded({extended: true}))
 app.use(cookieParser('P@l@bra53cr3t0'))
+app.use(addLogger)
 //const fileStore = FileStore(session)
 /* app.use(session({
     store: create({
@@ -75,7 +77,7 @@ passport.use(passport.initialize())
 app.use("/static", express.static(__dirname+"/public"))
 
 app.use((req, res, next) =>{
-    console.log("nid app - time", Date.now())
+    logger.info("nid app - time", Date.now())
     next()
 })
 app.use("/", viewsRoutes)

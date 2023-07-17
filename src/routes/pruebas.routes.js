@@ -6,9 +6,58 @@ const { sendMail } = require('../utils/sendmail.js')
 const { sendWhatsapp, sendSms } = require('../utils/sendsms.js')
 const { generateUser } = require('../utils/generateUserFaker.js')
 const compression = require ('express-compression')
+const { route } = require('./product.mongo.routes.js')
+const { logger } = require ('../config/logger.js')
+const { faker } = require ('@faker-js/faker')
 
 
 const router = Router()
+
+
+router.get('/testuser', (req, res)=>{
+    let persona = {
+        first_name: faker.person.firstName(),
+        last_name:  faker.person.lastName(),
+        email:      faker.internet.email(),
+        password:   faker.internet.password()
+    }
+
+    res.send({
+        status: 'success', 
+        payload: persona
+    })
+}) 
+
+router.get('/simple',(req,res) => {
+    let suma = 0
+    for (let i = 0; i < 1000000; i++) {
+        suma += i
+    }
+    res.send({suma})
+})
+
+router.get('/compleja',(req,res) => {
+    let suma = 0
+    for (let i = 0; i < 5e8; i++) {
+        suma += i
+    }
+    res.send({suma})
+})
+
+
+
+router.get('/logger', (req, res) => {
+    // req.logger.warn('alerta')
+    // req.logger.error('alerta')
+    // req.logger.info('info')
+    // req.logger.warning('warning')
+    // req.logger.error('error')
+    // req.logger.fatal('fatal error')
+
+    res.send({message: 'prueba de logger'})
+})
+
+
 
 
 router.use(compression({

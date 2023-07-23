@@ -4,8 +4,8 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon src/server.js -- mode production",
-    "dev": "node src/server.js -- mode development"
+    "server": "nodemon app.js -- mode production",
+    "start": "node app.js -- mode development"
   },
   "repository": {
     "type": "git",

@@ -34,13 +34,15 @@ const { addLogger, logger } = require("./config/logger.js")
 const product = new ProductManager()
 const app = express()
 //const userRouter = new UserRouter()
+const { Server: ServerHTTP } = require('http')
+const { Server: ServerIO } = require('socket.io')
 
-const PORT = 8080; //precess.env.PORT
-const httpServer = app.listen(PORT, () => {
-    logger.info(`Express Local Host ${httpServer.address().port}`)
-})
+const serverHttp = new ServerHTTP(app)
+const io         = new ServerIO(serverHttp)
+const PORT =  process.env.PORT
 
-const io = new Server(httpServer)
+
+//const io = new Server(httpServer)
 
 objetConfig .connectDB
 
@@ -104,3 +106,7 @@ socketProduct(io)
     res.status(500).send("Todo Mal")
 }) */
 app.use(errorHandler)
+
+exports.initServer = () => serverHttp.listen(PORT,()=>{
+    logger.info(`Express Local Host: ${PORT}`)
+})

@@ -1,6 +1,12 @@
 const {Router} = require ("express")
+const path = require ('path')
 
 const router = Router()
+
+router.get('/api/userTest', (req, res) =>{
+    const file = path.join(__dirname,'../public/userTest.html')
+    res.sendFile(file)
+})
 
 router.get('/login', (req, res) => {
     res.render('login')

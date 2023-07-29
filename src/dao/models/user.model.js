@@ -4,24 +4,27 @@ const collection = 'user'
 const userSchema = new Schema({
     first_name: {
         type: String,
-        index: true
-        
+        index: true,
+        required: true
     },
     last_name: {
         type: String,
+        required: true
     },
+    full_name: String,
     email: {
         type: String,
         required: true,
-        unique: true,
-        index: true
+        unique: true
     },
-    password: {
+    password: String,
+    role: {
         type: String,
-        unique: true,
-        require: true
+        enum: ['admin', 'user'],
+        default: 'user'
     }
 })
+
 
 //userSchema.plugin(mongoosePaginate)
 const userModel = model(collection, userSchema)

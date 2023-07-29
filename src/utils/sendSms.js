@@ -1,4 +1,4 @@
-const twilio = require('twilio')
+/* const twilio = require('twilio')
 const config = require('../config/objetConfig')
 
 const twilio_sid          = config.twilio_sid 
@@ -17,4 +17,4 @@ exports.sendWhatsapp = (nombre, apellido) => cliente.messages.create({
     from: `whatsapp:+14155238886`,
     to: `whatsapp:${config.my_phone_number}`
 })
-
+ */

@@ -25,18 +25,31 @@ class UserController {
             console.log(error)
         }
     }
+
+    getUsersById = async (req, res)=>{
+        try {
+            const {uid} = req.params
+            let user = await userService.getById(uid)
+            res.send({
+                status: 'success',
+                payload: user
+            }) 
+        } catch (error) {
+            console.log(error)
+        }
+      }
     
     createUsers = async (req, res)=>{
         try {
             let user = req.body
     
-            if(!user.nombre || !user.apellido){ 
+            if(!user.first_name || !user.last_name){ 
                 return res.status(400).send({status:'error', mensaje: 'todos los campos son necesarios'})
             }
     
             const newUser = {
-                first_name: user.nombre, 
-                last_name: user.apellido,
+                first_name: user.first_name, 
+                last_name: user.last_name,
                 email: user.email
             } 
             
@@ -55,17 +68,17 @@ class UserController {
         const user = req.body
     
         
-        if(!user.nombre || !user.apellido){ 
+        if(!user.first_name || !user.last_name){ 
             return res.status(400).send({status:'error', mensaje: 'todos los campos son necesarios'})
         }
        
         let  userToReplace = {
-            first_name: user.nombre,
-            last_name: user.apellido,
+            first_name: user.first_name,
+            last_name: user.last_name,
             email: user.email
         }
     
-        let result = await userModel.updateOne({_id: uid}, userToReplace)
+        let result = await userService.update({_id: uid}, userToReplace)
         
     
         res.send({
@@ -78,7 +91,7 @@ class UserController {
         try {
             let {uid} = req.params
         
-            let result = await userModel.deleteOne({_id: uid})
+            let result = await userService.delete({_id: uid})
             res.send({status: 'success', payload: result})
             
         } catch (error) {

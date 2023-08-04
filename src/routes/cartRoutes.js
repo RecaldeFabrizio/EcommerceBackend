@@ -7,12 +7,12 @@ const router = Router()
 router.get('/',  async (req, res)=>{
     try {
         
-        const {page = 1} = req.query
-        const carts = await cartModel.paginate({},{limit: 1, page: page, lean: true})
-        const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = carts
+        /* const {page = 1} = req.query */
+        const carts = await cartModel.find({}/* ,{limit: 1, page: page, lean: true} */)
+        /* const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = carts */
         //console.log(docs)
 
-        res.render('cart',{
+       /*  res.render('cart',{
           carts: docs,
           status: 'success',
           hasPrevPage,
@@ -20,8 +20,8 @@ router.get('/',  async (req, res)=>{
           prevPage,
           nextPage,
           totalPages
-      })
-        
+      }) */
+        res.send({status: 'success', payload: carts})
     } catch (error) {
         console.log(error)
     }

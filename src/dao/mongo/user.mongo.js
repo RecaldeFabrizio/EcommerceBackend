@@ -7,7 +7,7 @@ class UserDaoMongo {
         this.userModel = userModel
     }
 
-    get = async(limit = 10, page = 1) => await this.userModel.paginate({}, { limit, page, lean: true });
+    get = async(limit = 10, page = 1) => await this.userModel.find({}, /* { limit, page, lean: true } */);
 
     getById = async (uid) => await this.userModel.findOne({_id: uid})
 

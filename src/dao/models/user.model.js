@@ -1,5 +1,5 @@
 const {Schema, model} = require('mongoose')
-const mongoosePaginate = require('mongoose-paginate-v2')
+//const mongoosePaginate = require('mongoose-paginate-v2')
 const collection = 'user'
 const userSchema = new Schema({
     first_name: {
@@ -11,7 +11,7 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    full_name: String,
+    //full_name: String,
     email: {
         type: String,
         required: true,

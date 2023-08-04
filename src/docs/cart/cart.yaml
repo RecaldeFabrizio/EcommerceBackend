@@ -1,0 +1,131 @@
+paths:
+  /api/cart/:
+    get:
+      summary: Obtiene todos los carritos de compra
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carritos obtenidos correctamente
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Cart"
+    post:
+      summary: Crea un nuevo carrito de compra
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carrito creado correctamente
+          schema:
+            $ref: "#/definitions/Cart"
+  /api/cart/{cid}:
+    get:
+      summary: Obtiene un carrito de compra por su id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          type: string
+          description: Id del carrito de compra a solicitar
+      responses:
+        "200":
+          description: Carrito obtenido correctamente
+          schema:
+            $ref: "#/definitions/Cart"
+        "404":
+          description: Carrito no encontrado
+    delete:
+      summary: Elimina un carrito de compra por su id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          type: string
+          description: Id del carrito de compra a eliminar
+      responses:
+        "200":
+          description: Carrito eliminado correctamente
+        "404":
+          description: Carrito no encontrado
+  /api/cart/{cid}/product/{pid}:
+    post:
+      summary: Agrega un producto al carrito de compra
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          type: string
+          description: Id del carrito de compra al que se agregará el producto
+        - name: pid
+          in: path
+          required: true
+          type: string
+          description: Id del producto a agregar al carrito
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/AddToCartRequest"
+      responses:
+        "200":
+          description: Producto añadido al carrito
+        "404":
+          description: Carrito o producto no encontrado
+    delete:
+      summary: Elimina un producto del carrito de compra
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          type: string
+          description: Id del carrito de compra del cual eliminar el producto
+        - name: pid
+          in: path
+          required: true
+          type: string
+          description: Id del producto a eliminar del carrito
+      responses:
+        "200":
+          description: Producto eliminado del carrito
+        "404":
+          description: Carrito o producto no encontrado
+definitions:
+  Cart:
+    type: object
+    properties:
+      _id:
+        type: string
+        description: Id del carrito de compra
+      cart:
+        type: array
+        description: Lista de productos en el carrito
+        items:
+          $ref: "#/definitions/CartItem"
+
+  CartItem:
+    type: object
+    properties:
+      product:
+        type: string
+        description: Id del producto
+      quantity:
+        type: integer
+        description: Cantidad del producto en el carrito
+
+  AddToCartRequest:
+    type: object
+    properties:
+      quantity:
+        type: integer
+        description: Cantidad del producto a agregar al carrito

@@ -1,0 +1,145 @@
+paths:
+  /api/productMongo/:
+    get:
+      summary: Obtiene todos los productos
+      tags: 
+        - Products
+      responses:
+        "200":
+          description: Los productos fueron obtenidos correctamente
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#components/schemas/Product'
+        "500":
+          description: Error interno del server, usualmente generado por una query defectuosa
+    post:
+      summary: Crea un nuevo producto.
+      tags: 
+        - Products
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema: 
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "201":
+          description: El producto fue creado correctamente
+  /api/productMongo/{pid}:
+    get:
+      summary: Obtiene un producto por su pid
+      tags: 
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: El id del Producto a solicitar.
+        schema:
+          type: string  
+      responses:
+        "200":
+          description: El Producto fue obtenido correctamente
+          content:
+            application/json:
+              schema: 
+                $ref: '#components/schemas/Product'
+    put:
+      summary: Se actualiza un Product en base un pid
+      tags:
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: El product id del producto a actualizar
+        schema: 
+          type: string
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'  
+    delete:
+      summary: Elimina un producto por su pid
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          type: string
+          description: Id del producto a eliminar
+      responses:
+        "200":
+          description: Producto eliminado correctamente
+        "404":
+          description: Producto no encontrado
+
+components:
+  schemas: 
+    Product: 
+      type: object
+      properties: 
+        _id:
+          type: string
+          description: Id autogenerado por Mongo.
+        title:
+          type: string
+          description: titulo del producto.
+        description:
+          type: string
+          description: descripcion del producto.
+        thumbnail:
+          type: string
+          description: imagen del producto.
+        price:
+          type: number
+          description: precio del producto.
+        stock:
+          type: number
+          description: cantidad de productos.
+        code:
+          type: string
+          description: codigo del producto.
+      example:
+        _id: ObjectId("64a2707d9620cbbd7216b7dd")
+        title: "producto 4"
+        description: "Descripción 4"
+        thumbnail: "URL de la imagen del producto"
+        price: 4000
+        stock: 400
+        code: "004"
+  requestBodies: 
+    updateProduct:
+      type: object
+      properties: 
+        title:
+          type: string
+          description: titulo del producto.
+        description:
+          type: string
+          description: descripcion del producto.
+        thumbnail:
+          type: string
+          description: imagen del producto.
+        price:
+          type: number
+          description: precio del producto.
+        stock:
+          type: number
+          description: cantidad de productos.
+        code:
+          type: string
+          description: codigo del producto.
+      example:
+        title: "producto 4"
+        description: "Descripción 4"
+        thumbnail: "URL de la imagen del producto"
+        price: 4000
+        stock: 400
+        code: "004"

@@ -29,6 +29,8 @@ const passport = require('passport')
 const cors = require ("cors")
 const { errorHandler } = require("./middleware/error.middleware.js")
 const { addLogger, logger } = require("./config/logger.js")
+const swaggerJsDoc = require ('swagger-jsdoc')
+const swaggerUiExpress = require ('swagger-ui-express')
 
 
 
@@ -83,6 +85,23 @@ app.use((req, res, next) =>{
     logger.info("nid app - time", Date.now())
     next()
 })
+
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Docs Ecommerce',
+            description: 'Documentos de User, Product y Cart'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+} 
+
+const specs = swaggerJsDoc(swaggerOptions)
+app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+
+
 app.use("/", viewsRoutes)
 app.use("/cookie", cookieRoutes)
 app.use('/pruebas', pruebasRoutes)

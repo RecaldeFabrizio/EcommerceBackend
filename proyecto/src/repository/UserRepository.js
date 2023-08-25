@@ -1,10 +1,10 @@
+const GenericRepository =  require("./GenericRepository.js")
 
-import GenericRepository from "./GenericRepository.js";
-
-export default class UserRepository extends GenericRepository{
+class UserRepository extends GenericRepository{
     constructor(dao){
         super(dao);
     }
+
     
     getUserByEmail = (email) =>{
         return this.getBy({email});
@@ -14,3 +14,5 @@ export default class UserRepository extends GenericRepository{
     }
     
 }
+
+module.exports = UserRepository

@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose')
 
-const collection = 'Pets';
+const collection = 'Pets'
 
 const schema = new mongoose.Schema({
     name:{
@@ -23,6 +23,6 @@ const schema = new mongoose.Schema({
     image:String
 })
 
-const petModel = mongoose.model(collection,schema);
+const petModel = mongoose.model(collection,schema)
 
-export default petModel;
+module.exports = petModel

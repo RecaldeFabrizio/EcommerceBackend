@@ -1,7 +1,9 @@
-import chai from 'chai';
-import { createHash, passwordValidation } from '../src/utils/index.js';
-import createStatsCollector from 'mocha/lib/stats-collector.js';
-import UserDTO from '../src/dto/User.dto.js';
+const mongoose = require('mongoose')
+const chai = require('chai')
+const { createHash, passwordValidation } = require('../src/utils')
+const createStatsCollector = require('mocha/lib/stats-collector')
+const UserDTO = require('../src/dto/User.dto')
+
 
 const expect = chai.expect;
 

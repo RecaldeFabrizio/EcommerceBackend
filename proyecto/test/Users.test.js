@@ -1,7 +1,8 @@
-import mongoose from 'mongoose'
-import UserDao from '../src/dao/Users.dao.js'
-import Assert from 'assert'
-//import updateOne  from'../src/dao/models/User.js'
+const mongoose = require('mongoose')
+const UserDao = require('../src/dao/Users.dao.js')
+const Assert = require('assert')
+const { updateOne } = require('../src/dao/models/User.js')
+
 
 mongoose.connect('mongodb://localhost:27017/proyectos')
 

@@ -1,0 +1,56 @@
+paths: 
+  /api/sessions/login:
+    post:
+      summary: Inicia una nueva sesión.
+      tags:
+        - Sessions
+      requestBody: 
+        required: true
+        content: 
+          application/json: 
+            schema: 
+              $ref: '#components/requestBodies/updateUser'
+      responses:
+        "201":
+          description: La sesión fue creada correctamente
+          headers: 
+            Set-Cookie:
+              schema: 
+                type: string
+                example: coderCookie=hola; Path=/; HttpOnly 
+  /api/users:
+    get: 
+      summary: Obtiene todos los usuarios
+      tags: 
+        - Users
+      security: 
+        - cookieAuth: []
+      responses: 
+        "200":
+          description: Los usuarios fueron obtenidos correctamente
+          content: 
+            application/json:
+              schema: 
+                type: Array
+          
+
+components: 
+  requestBodies:
+    updateUser:
+      type: object
+      properties: 
+        email: 
+          type: string
+          description: El email del usuario
+        password: 
+          type: string
+          description: El password del usuario
+      example: 
+        email: fabrizio.recalde98@gmail.com
+        password: '123321' 
+  securitySchemes: 
+    cookieAuth:
+      type: apiKey 
+      in: cookie
+      name: coderCookie
+        

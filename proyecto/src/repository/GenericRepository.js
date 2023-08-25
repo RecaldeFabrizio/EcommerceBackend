@@ -1,5 +1,4 @@
-
-export default class GenericRepository {
+class GenericRepository {
     constructor(dao) {
         this.dao = dao;
     }
@@ -24,3 +23,5 @@ export default class GenericRepository {
         return this.dao.delete(id);
     }
 }
+
+module.exports = GenericRepository

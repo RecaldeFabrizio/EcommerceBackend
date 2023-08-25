@@ -1,7 +1,7 @@
-import { usersService } from "../services/index.js";
-import { createHash, passwordValidation } from "../utils/index.js";
-import jwt from 'jsonwebtoken';
-import UserDTO from '../dto/User.dto.js';
+const { usersService } = require("../services/index.js")
+const { createHash, passwordValidation } = require("../utils/index.js")
+const jwt = require('jsonwebtoken')
+const UserDTO = require('../dto/User.dto.js')
 
 const register = async (req, res) => {
     try {
@@ -33,11 +33,13 @@ const login = async (req, res) => {
     if(!isValidPassword) return res.status(400).send({status:"error",error:"Incorrect password"});
     const userDto = UserDTO.getUserTokenFrom(user);
     const token = jwt.sign(userDto,'tokenSecretJWT',{expiresIn:"1h"});
-    res.cookie('coderCookie',token,{maxAge:3600000}).send({status:"success",message:"Logged in"})
+    res.cookie('coderCookie',token,{maxAge:3600000}).send({status:"success",message:"Logged in", token})
+    // res.send({status:"success",message:"Logged in", token})
 }
 
 const current = async(req,res) =>{
     const cookie = req.cookies['coderCookie']
+    // console.log(cookie)
     const user = jwt.verify(cookie,'tokenSecretJWT');
     if(user)
         return res.send({status:"success",payload:user})
@@ -59,7 +61,7 @@ const unprotectedCurrent = async(req,res)=>{
     if(user)
         return res.send({status:"success",payload:user})
 }
-export default {
+module.exports = {
     current,
     login,
     register,

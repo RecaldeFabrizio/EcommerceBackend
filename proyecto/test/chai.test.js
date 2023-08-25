@@ -1,6 +1,6 @@
-import mongoose from 'mongoose'
-import User from '../src/dao/Users.dao.js'
-import chai from 'chai'
+const mongoose = require('mongoose')
+const User = require('../src/dao/Users.dao.js')
+const chai = require('chai')
 
 mongoose.connect('mongodb://localhost:27017/proyectos')
 const expect = chai.expect

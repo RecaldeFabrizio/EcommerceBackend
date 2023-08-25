@@ -1,23 +1,42 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cookieParser from 'cookie-parser';
-import config from './config/config.js';
+const express = require('express' )
+const mongoose = require('mongoose' )
+const cookieParser = require('cookie-parser' )
 
-import usersRouter from './routes/users.router.js';
-import petsRouter from './routes/pets.router.js';
-import adoptionsRouter from './routes/adoption.router.js';
-import sessionsRouter from './routes/sessions.router.js';
+const usersRouter = require('./routes/users.router.js' )
+const petsRouter = require('./routes/pets.router.js' )
+const adoptionsRouter = require('./routes/adoption.router.js' )
+const sessionsRouter = require('./routes/sessions.router.js')
+const { addLogger } = require('./middleware/logger.middleware.js')
+const { logger } = require('./config/logger.js')
 
-const app = express();
-const PORT = process.env.PORT||8080;
-const connection = mongoose.connect(config.mongo.URL)
+const swaggerJsDoc = require('swagger-jsdoc')
+const swaggerUiExpress = require('swagger-ui-express')
 
-app.use(express.json());
-app.use(cookieParser());
+const app = express() 
+const PORT = process.env.PORT||8080 
+const connection = mongoose.connect(`mongodb://localhost:27017/proyectos`)
+logger.info('Base de datos conectada')
 
-app.use('/api/users',usersRouter);
-app.use('/api/pets',petsRouter);
-app.use('/api/adoptions',adoptionsRouter);
-app.use('/api/sessions',sessionsRouter);
+app.use(express.json())
+app.use(cookieParser())
+app.use(addLogger)
 
-app.listen(PORT,()=>console.log(`Listening on ${PORT}`))
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentación para la app de mascotas',
+            description: 'Esta es la documentación de adoptame'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+}
+const specs = swaggerJsDoc(swaggerOptions)
+
+app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+app.use('/api/users',usersRouter) 
+app.use('/api/pets',petsRouter) 
+app.use('/api/adoptions',adoptionsRouter) 
+app.use('/api/sessions',sessionsRouter) 
+
+app.listen(PORT,()=>logger.info(`Listening on ${PORT}`))

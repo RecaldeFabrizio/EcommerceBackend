@@ -1,8 +1,9 @@
-import chai from 'chai'
-import supertest from 'supertest'
+const chai = require('chai')
+const supertest = require('supertest')
 
 const expect = chai.expect
 const requester = supertest('http://localhost:8080')
+
 
 describe('Testing de adoptame', ()=>{
     describe('Test de mascota', ()=>{

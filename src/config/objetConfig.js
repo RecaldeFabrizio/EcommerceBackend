@@ -13,6 +13,7 @@ dotenv.config({
 let url = process.env.MONGO_URL_LOCAL
 
 module.exports = {
+    //privateKey: 'Ecommer',
     persistence: process.env.PERSISTENCE,
     port: process.env.PORT,
     jwt_secret_key: process.env.JWT_SECRET_KEY,

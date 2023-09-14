@@ -1,4 +1,4 @@
-console.log('estamos aca')
+/* console.log('holo')
 const form = document.querySelector('#cookieForm')
 
 form.addEventListener('submit', (e) =>{
@@ -23,7 +23,7 @@ form.addEventListener('submit', (e) =>{
         localStorage.setItem('token', respuesta.access_token)
     })
 })
-
+ */
 //const getCookie = () => {
     //console.log(document.cookie)
 //}

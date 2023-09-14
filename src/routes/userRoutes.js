@@ -1,12 +1,12 @@
 const { Router } = require('express')
-const { auth } = require('../middleware/autenticacionMiddleware.js')
 const {
     getUsers, 
     createUsers, 
     updateUsers, 
     deleteUsers,
     getUsersById
-} = require('../controllers/users.controller.js')
+} = require('../controllers/users.controller.js');
+//const { auth } = require('../middleware/autenticacionMiddleware.js'); 
 
 const router = Router();
 

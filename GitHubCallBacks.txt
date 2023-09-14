@@ -1,0 +1,16 @@
+App ID: 345113
+Client ID: Iv1.78768ac3bd9effce
+Cliend_Secret: daaa142d29ff93ff75ea6aece628393609522879
+
+
+
+google password Ecommerce: okzfqtvmxwcxngsk
+
+
+codigo recupecacion twilio: dcWWstDknhvl_xs-BikGXCgrUaSjsadmxgN5PG3i
+
+token twilio: f27294ff76c0688155cbed8196c0c67e
+
+sid twilio: AC0905d49b56a8968119ecb5cfa8670a98
+
+My Twilio phone number: +12176991470

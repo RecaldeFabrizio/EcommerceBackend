@@ -1,39 +1,56 @@
-const passport = require('passport')
-const {Strategy, ExtractJwt} = require('passport-jwt')
-const objectConfig = require('../config/objetConfig.js')
+const passport = require("passport");
+const local = require('passport-local');
+const { userModel } = require("../dao/models/user.model");
+const { createHash, isValidPassword } = require("../utils/bcryptHash");
 
-const JWTStrategy = Strategy
-const ExtractJWT = ExtractJwt
+const LocalStrategy = local.Strategy
 
-const cookieExtractor = req => {
-    let token = null
-    console.log(req.cookies)
-    if(req && req.cookies){
-        token = req.cookies['coderCookieToken'] 
-    }
-    
-    console.log(token)
-    
-    return token
-}
-
-const configStrategy = {
-    jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-    secretOrKey: 'palabraJwtSecreto'
-}
-
-const initPassport= ()=>{
-    passport.use('jwt', new JWTStrategy(configStrategy, async (jwt_payload, done)=>{
+const initPassport = () =>{
+    passport.use('register', new LocalStrategy({
+        passReqToCallback: true,
+        usernameField: 'email'
+    },async(req, username, password, done)=>{
+        const{first_name, last_name} = req.body
         try {
-                
-            return done(null, jwt_payload)
+            let userDB = await userModel.findOne({email:username})
+            if(userDB) return done (null, false)
+
+            let newUser = {
+                first_name,
+                last_name,
+                email: username,
+                password: createHash(password)
+            }
+
+            let result = await userModel.create(newUser)
+            return done (null, result)
+        } catch (error) {
+            return done('Error al obtener el usuario'+error)
+        }
+    }))
+
+    passport.serializeUser((user, done) =>{
+        done(null, user._id)
+    })
+
+    passport.deserializeUser(async (id, done) =>{
+        let user = await userModel.findOne({_id: id})
+        done(null, user)
+    })
+
+    passport.use('login', new LocalStrategy({
+        usernameField: 'email'
+    }, async (username, password, done) =>{
+        const userDB = await userModel.findOne({email: username})
+        try {
+            if (!userDB) return done(null, false)
+
+            if(!isValidPassword(password, userDB)) return done(null, false)
+            return done(null, userDB)
         } catch (error) {
             return done(error)
         }
     }))
 }
 
-module.exports = {
-    initPassport
-}
-
+module.exports = {initPassport}

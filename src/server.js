@@ -17,14 +17,15 @@ const cartRoutes = require ("./routes/cartRoutes.js")
 //const UserRouter = require ("./routes/newUser.routes.js")
 const UserRouter = require ("./routes/userRoutes.js")
 const userTestRouter = require('./routes/userTest.routes.js')
+const paymentsRouter = require ('./routes/payments.router.js')
 const viewsRoutes = require ("./routes/viewsRoutes.js")
 const objetConfig = require ("./config/objetConfig.js")
 const {Server} = require ("socket.io")
 const { socketChat } = require("./utils/socketChat.js")
 const { socketProduct } = require("./utils/socketProduct.js")
 const {CartManager} = require("./dao/manager/cartManager.js")
-/* const { initPassport, initPassportGithub } = require('./config/passport.config.js') */
-const {initPassport} = require('./passport-jwt/passport.config.js')
+//const { initPassport, initPassportGithub } = require('./config/passport.config.js') 
+const {initPassport} = require ('./passport-jwt/passport.config.js')
 const passport = require('passport')
 const cors = require ("cors")
 const { errorHandler } = require("./middleware/error.middleware.js")
@@ -59,24 +60,24 @@ app.use(express.urlencoded({extended: true}))
 app.use(cookieParser('P@l@bra53cr3t0'))
 app.use(addLogger)
 //const fileStore = FileStore(session)
-/* app.use(session({
+  app.use(session({
     store: create({
         mongoUrl:'mongodb+srv://FDR98:Hesoyam123@cluster0.gkja86y.mongodb.net/test',
         mongoOptions:{
             useNewUrlParser: true,
-            useUnifiedTopoLogy: true
+            useUnifiedTopology: true
         },
-        ttl: 100000*6
+        ttl: 100000*6000
     }),
     secret: 'secretCoder',
     resave: false,
     saveUninitialized: false
-})) */
+}))   
 
 initPassport()
 //initPassportGithub()
 passport.use(passport.initialize())
-//passport.use(passport.session())
+passport.use(passport.session()) 
 
 
 app.use("/static", express.static(__dirname+"/public"))
@@ -103,6 +104,7 @@ app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 
 app.use("/", viewsRoutes)
+app.use('/api/payments', paymentsRouter)
 app.use("/cookie", cookieRoutes)
 app.use('/pruebas', pruebasRoutes)
 app.use('/api/session', sessionRouter)

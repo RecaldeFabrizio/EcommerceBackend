@@ -28,6 +28,7 @@ const ItemList = ({ products, cartId }) => {
   };
 
   return (
+    <>
     <div style={{
       display: "flex",
       flexDirection: "row",
@@ -45,6 +46,7 @@ const ItemList = ({ products, cartId }) => {
         />
       ))}
     </div>
+    </>
   );
 };
 

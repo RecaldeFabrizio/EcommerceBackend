@@ -16,10 +16,10 @@ const NavBar = () => {
                 <Link className="nav-link " aria-current="page" to='/Products'>Products</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link " aria-current="page" to='/Carts'>Carts</Link>
+                <Link className="nav-link " aria-current="page" to='/Users'>Users</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link " aria-current="page" to='/Users'>Users</Link>
+                <Link className="nav-link " aria-current="page" to='/Payments'>Payment</Link>
               </li>
               <NavDropdown title="Sessions" id="basic-nav-dropdown" data-bs-theme="dark">
               <NavDropdown.Item>

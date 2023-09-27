@@ -6,16 +6,16 @@ const {
     deleteUsers,
     getUsersById
 } = require('../controllers/users.controller.js');
-//const { auth } = require('../middleware/autenticacionMiddleware.js'); 
+const { auth } = require('../middleware/autenticacionMiddleware.js'); 
 
 const router = Router();
 
 router.get('/',  
-    // auth, 
+     auth, 
     getUsers
 )
 
-router.get('/:uid', getUsersById)
+router.get('/:uid', auth, getUsersById)
 
 router.post('/', createUsers)
 

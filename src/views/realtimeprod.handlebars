@@ -12,10 +12,10 @@
     socket.on("productos", data =>{
         console.log(data)
     let div = document.getElementById("listProducts")
-    let Productos = ""
+    let Product = ""
     data.forEach((product) => {
-        Productos += `<div> <ul> ${product.title} Precio: ${product.price} Cantidad: ${product.stock} </ul> </div>`
+        Product += `<div> <ul> ${product.title} Precio: ${product.price} Cantidad: ${product.stock} </ul> </div>`
     })
-    div.innerHTML = Productos
+    div.innerHTML = Product
 })
 </script>

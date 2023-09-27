@@ -1,7 +1,5 @@
 const  Router  = require ("express")
-const ProductManager = require ("../dao/manager/ProductManager.js") 
-//const { authToken } = require('../utils/jwt.js')                                                                                                                                                                             
-const passport = require("passport")
+const ProductManager = require ("../controller/ProductSocket.js")                                                                                                                                                                              
 
 const productRoutes  = (Product) =>{
 
@@ -9,7 +7,7 @@ const productRoutes  = (Product) =>{
 const readProduct = Product.readProduct()
 const router = Router()
 
-router.get("/", /* passport.authenticate('jwt', {session: false}), */ async (req, res) =>{
+router.get("/", async (req, res) =>{
     let limit = parseInt(req.query. limit)
     if(!limit) return res.send(await readProduct)
     let allProducts = await readProduct

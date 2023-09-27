@@ -16,11 +16,11 @@ class ProductDaoFile{
     }
 
     update(pid, updateProduct){
-        
+        return this.products.push({_id: pid}, updateProduct)
     }
 
     delete(pid){
-        
+        return this.products.push({_id:pid})
     }
 }
 

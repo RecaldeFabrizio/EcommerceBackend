@@ -1,3 +1,4 @@
+const { cartModel } = require("../dao/models/cart.model")
 const { userService } = require("../service")
 
 class UserController {
@@ -54,9 +55,14 @@ class UserController {
             } 
             
             let result =  await userService.create(newUser) 
+            let newCart = await cartModel.create({cart: []})
+
+            result.cart = newCart._id
+            await result.save();
+
     
             
-            res.status(200).send({result})
+            res.status(200).send({result,newCart})
         } catch (error) {
             console.log(error)
         }

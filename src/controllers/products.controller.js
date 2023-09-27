@@ -6,7 +6,7 @@ getProducts = async (req, res)=>{
   try {
       //const {page = 1} = req.query
       //const product = await productService.paginate({},{limit: 1, page: page, lean: true})
-      const products = await productService.getProducts()
+      const products = await productService.get()
       //const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products
       //console.log(docs)
 
@@ -30,7 +30,7 @@ getProducts = async (req, res)=>{
 getProuduct = async (req, res)=>{
   try {
       const {pid} = req.params
-      let product = await productService.getProduct(pid)
+      let product = await productService.getById(pid)
       res.send({
           status: 'success',
           payload: product
@@ -44,9 +44,22 @@ getProuduct = async (req, res)=>{
 
 createProduct = async (req, res) => {
   try {
-    const {body} = req
+    let product = req.body
+
+    if(!product.title || !product.description || !product.thumbnail || !product.price || !product.stock || !product.code){ 
+      return res.status(400).send({status:'error', mensaje: 'todos los campos son necesarios'})
+  }
+
+  let newProduct = {
+    title: product.title,
+    description: product.description,
+    thumbnail: product.thumbnail,
+    price: product.price,
+    stock: product.stock,
+    code: product.code
+  };
     
-    let  result = await productService.createProduct(body)
+    let  result = await productService.create(newProduct)
     res.send({
         stauts: 'success',
         payload: result
@@ -59,34 +72,34 @@ createProduct = async (req, res) => {
 
 updateProduct = async (req, res) => {
   const { pid } = req.params;
-  const products = req.body;
+  const product = req.body;
 
-  try {
+    if(!product.title || !product.description || !product.thumbnail || !product.price || !product.stock || !product.code){ 
+      return res.status(400).send({status:'error', mensaje: 'todos los campos son necesarios'})
+  }
+
     let productsToReplace = {
-      title: products.title,
-      description: products.description,
-      thumbnail: products.thumbnail,
-      price: products.price,
-      stock: products.stock,
-      code: products.code
+      title: product.title,
+      description: product.description,
+      thumbnail: product.thumbnail,
+      price: product.price,
+      stock: product.stock,
+      code: product.code
     };
 
-    let result = await productService.updateOne({_id: pid}, productsToReplace);
+    let result = await productService.update({_id: pid}, productsToReplace);
 
     res.status(200).send({
       status: 'success',
       payload: result
     });
-  } catch (error) {
-    console.log(error);
-  }
 }
 
 deleteProduct = async (req, res) => {
   try {
     let { pid } = req.params;
 
-    let result = await productService.deleteOne({_id: pid});
+    let result = await productService.delete({_id: pid});
     res.send({ status: 'success', payload: result });
   } catch (error) {
     console.log(error);

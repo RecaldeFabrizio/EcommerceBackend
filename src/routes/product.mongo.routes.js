@@ -15,3 +15,4 @@ router.put('/:pid', products.updateProduct)
 router.delete('/:pid' , products.deleteProduct)
 
 module.exports = router;
+

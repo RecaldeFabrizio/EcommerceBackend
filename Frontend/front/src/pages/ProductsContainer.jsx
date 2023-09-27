@@ -9,7 +9,7 @@ const ProductsContainer = () => {
     
 
     useEffect(()=>{
-        fetch('http://localhost:8080/api/productMongo')
+        fetch('http://localhost:8080/api/product')
         .then(resp => resp.json())
         .then(resp => setProdutcs(resp.payload))
         .catch(error => console.log(error))
